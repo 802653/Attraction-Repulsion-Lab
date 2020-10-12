@@ -11,7 +11,7 @@ function Game(){
 
     //   create the array of bubble objects
     this.bubbles = [];
-    let numBubbles = 151;
+    let numBubbles = 2;
     for(var i = 0; i < numBubbles; i++){
         var x, y, dx, dy, diam, clr, r, g, b;
         x = Math.random()*this.canvas.width;
@@ -26,7 +26,7 @@ function Game(){
         this.bubbles.push(new Bubble(x, y, dx, dy, diam, clr)); // add new bubble to array
     }
 
-	this.bubbles.push(new BlackHole(Math.random()*this.canvas.width, Math.random()*this.canvas.height,Math.random()*2-1,Math.random()*2-1,40,clr,50));
+
 
     //  Add event handlers to all tile objects
     for(let i = 0; i < this.ga.tiles.length; i++){
@@ -51,10 +51,26 @@ function Game(){
 // function to run the game each animation cycle
 Game.prototype.run = function(){
   if(!this.gamePaused){
+	this.gravitySimulate();
     for(let i = 0; i < this.bubbles.length; i++){
 	  if (this.bubbles[i]!= null) {
         this.bubbles[i].run();    // run each bubble
 	  }
    }
+   
   }
 }
+
+Game.prototype.gravitySimulate = function(){
+	var i, len = this.bubbles.length;
+	for (i = 0; i < len; i++) {
+		this.gravity = new JSVector(1,0.01);
+		this.bubbles[i].applyForce(this.gravity);
+		
+		
+		
+	}
+	
+}
+
+

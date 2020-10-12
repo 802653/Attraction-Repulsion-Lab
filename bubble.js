@@ -9,6 +9,9 @@ function Bubble(x, y, dx, dy, rad, clr){
 	this.rad = rad;
 	this.clr = clr;
 	this.isOverlapping = false;
+	this.mass = 0.001;
+	this.fx = 0;
+	this.fy = 0;
 }
 
   //  placing methods in the prototype (every bubble shares functions)
@@ -46,7 +49,7 @@ Bubble.prototype.render = function(){
     let ctx = game.ctx;
     // color depends on whether this bubble overlaps any oher bubble
 	if(!this.isOverlapping) {
-		ctx.strokeStyle = "rgba(255,255,255,255)"//this.clr;
+		ctx.strokeStyle = "rgba(255,155,255,255)"//this.clr;
 	}
 	else {
 		ctx.strokeStyle = "rgba(255,155,155,255)"//this.clr;
@@ -65,6 +68,30 @@ Bubble.prototype.update = function(){
     //  this.velocity.setMagnitude(Math.random()*4-8);
     //}
 	this.velocity.add(this.acceleration);
+	if(this.acceleration.x > 0.2) {
+			this.acceleration.x = 0.2
+	}
+	if(this.acceleration.y > 0.2) {
+			this.acceleration.y = 0.2
+	}
+	if(this.velocity.x > 0.2) {
+			this.velocity.x = 0.2
+	}
+	if(this.velocity.y > 0.2) {
+			this.velocity.x = 0.2
+	}
+	if(this.acceleration.x < -0.2) {
+			this.acceleration.x = -0.2
+	}
+	if(this.acceleration.y < -0.2) {
+			this.acceleration.y = -0.2
+	}
+	if(this.velocity.x < -0.2) {
+			this.velocity.x = -0.2
+	}
+	if(this.velocity.y < -0.2) {
+			this.velocity.x = -0.2
+	}
   }
 
 // When a bubble hits an edge of the canvas, it wraps around to the opposite edge.
