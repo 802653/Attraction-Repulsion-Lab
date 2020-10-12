@@ -7,9 +7,14 @@ function Bubble(x, y, dx, dy, rad, clr){
     this.velocity = new JSVector(dx,dy);
 	this.acceleration = new JSVector(0,0);
 	this.rad = rad;
+	this.mass = 0.31415 * rad * rad;
+	if(this.rad < 0.3) {
+			this.rad = 60
+			this.mass = 50
+	}
 	this.clr = clr;
 	this.isOverlapping = false;
-	this.mass = 10.0;
+	
 	this.f = null;
 }
 
@@ -22,18 +27,30 @@ Bubble.prototype.run = function(){
 	this.update();
 	this.render();
 	this.checkEdges();
-	this.velocity.limit(2);
 	this.acceleration.multiply(0);
 	
 }
 
 Bubble.prototype.applyForce = function(force) {
-	console.log("force=" + force);
-	this.f = new JSVector(force.copy());
-	console.log("f=" + this.f);
+	this.f = force.copy();
 	this.f.divide(this.mass);
-	console.log("f=" + this.f);
     this.acceleration.add(this.f); 
+	
+}
+
+Bubble.prototype.gravity = function(a) {
+	force = JSVector.subGetNew(this.location, a.location); 
+	let distance = force.getMagnitude();
+	if (distance < 20) {
+		distance = 20;
+	}
+	//if (distance > 200) {
+	//	distance = 200;
+	//}
+	//force.normalize();
+	let strength = (5 * this.mass * a.mass)/ (distance*distance);
+	force.setMagnitude(strength);
+	return force;
 	
 }
 
@@ -48,6 +65,20 @@ Bubble.prototype.checkOverlapping = function(){
          if(d < this.rad + b[i].rad){
             this.isOverlapping = true;
             this.clr =  "rgba(100,220,55,10)"
+			let vCollision = {x: this.location.x - b[i].location.x, y: this.location.y - b[i].location.y};
+              let vRelativeVelocity = {x: this.velocity.x - b[i].velocity.x, y: this.velocity.y - b[i].velocity.y};
+              let vCollisionNorm = {x: vCollision.x / d, y: vCollision.y / d};
+              let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
+
+              let impulse = 2 * speed / (this.mass + b[i].mass);
+              this.velocity.x -= (impulse * b[i].mass * vCollisionNorm.x);
+              this.velocity.y -= (impulse * b[i].mass * vCollisionNorm.y);
+			  
+              b[i].velocity.x += (impulse * this.mass * vCollisionNorm.x);
+              b[i].velocity.y += (impulse * this.mass * vCollisionNorm.y);
+			  
+			  this.location.add(this.velocity);
+			  b[i].location.add(b[i].velocity);
          }
        }
     }

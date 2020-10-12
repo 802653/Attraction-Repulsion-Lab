@@ -11,14 +11,14 @@ function Game(){
 
     //   create the array of bubble objects
     this.bubbles = [];
-    let numBubbles = 2;
+    let numBubbles = 20;
     for(var i = 0; i < numBubbles; i++){
         var x, y, dx, dy, diam, clr, r, g, b;
         x = Math.random()*this.canvas.width;
         y = Math.random()*this.canvas.height;
-        dx = Math.random()*4-2;
-        dy = Math.random()*4-2;
-        diam = 15;//Math.random()*20 + 10;
+        dx = 0;
+        dy = 0;
+        diam = Math.random()*6;
         r = 255;
         g = 255;
         b = 255;
@@ -51,26 +51,30 @@ function Game(){
 // function to run the game each animation cycle
 Game.prototype.run = function(){
   if(!this.gamePaused){
-	this.gravitySimulate();
+	
     for(let i = 0; i < this.bubbles.length; i++){
-	  if (this.bubbles[i]!= null) {
-        this.bubbles[i].run();    // run each bubble
+		for(let j = 0; j < this.bubbles.length; j++) {
+			let forces = new JSVector(0,0);
+			if(i!=j) {
+				force = this.bubbles[j].gravity(this.bubbles[i])
+				//force.multiply(-1);
+				this.bubbles[i].applyForce(force);
+				
+				//this.bubbles[j].applyForce(force);
+			}
+		}
+		    // run each bubble
+		
+		
+		
 	  }
+   }
+   for(let i=0; i <this.bubbles.length;i++) {
+		if (this.bubbles[i]!= null) {
+			this.bubbles[i].run();
    }
    
   }
-}
-
-Game.prototype.gravitySimulate = function(){
-	var i, len = this.bubbles.length;
-	for (i = 0; i < len; i++) {
-		this.gravity = new JSVector(1,0.01);
-		this.bubbles[i].applyForce(this.gravity);
-		
-		
-		
-	}
-	
 }
 
 
