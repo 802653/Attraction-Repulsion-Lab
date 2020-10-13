@@ -10,7 +10,7 @@ function Bubble(x, y, dx, dy, rad, clr){
 	this.mass = 0.31415 * rad * rad;
 	if(this.rad < 0.3) {
 			this.rad = 60
-			this.mass = 50
+			this.mass = 150
 	}
 	this.clr = clr;
 	this.isOverlapping = false;
@@ -28,7 +28,8 @@ Bubble.prototype.run = function(){
 	this.render();
 	this.checkEdges();
 	this.acceleration.multiply(0);
-	
+	this.velocity.x += -0.0001 * this.mass * this.velocity.x
+	this.velocity.y += -0.0001 * this.mass * this.velocity.y
 }
 
 Bubble.prototype.applyForce = function(force) {
