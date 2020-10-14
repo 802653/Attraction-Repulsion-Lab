@@ -11,19 +11,20 @@ function Game(){
 
     //   create the array of bubble objects
     this.bubbles = [];
-    let numBubbles = 20;
+    let numBubbles = 21;
     for(var i = 0; i < numBubbles; i++){
         var x, y, dx, dy, diam, clr, r, g, b;
         x = Math.random()*this.canvas.width;
         y = Math.random()*this.canvas.height;
         dx = 0;
         dy = 0;
-        diam = Math.random()*6;
+        diam = Math.random()*20;
         r = 255;
         g = 255;
         b = 255;
         clr = "rgba(" + r + ", "+ g + ","+ b +")"
         this.bubbles.push(new Bubble(x, y, dx, dy, diam, clr)); // add new bubble to array
+		this.bubbles.push(new Triangle(x+80, y+80, dx, dy, diam, clr)); // add new bubble to array
     }
 
 
